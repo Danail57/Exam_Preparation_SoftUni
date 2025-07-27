@@ -1,1 +1,40 @@
+def add_stop(stop_string: str, index: int, substring: str):
+    if 0 <= index <= len(stop_string):
+        stop_string = stop_string[:index] + substring + stop_string[index:]
+    return stop_string
+
+
+def remove_stop(stops: str, start_index: int, end_index: int):
+    if 0 <= start_index <= end_index < len(stops):
+        stops = stops[:start_index] + stops[end_index + 1:]
+    return stops
+
+
+def switch(stops: str, old_string: str, new_string: str):
+    if old_string in stops:
+        stops = stops.replace(old_string, new_string)
+    return stops
+
+
+stops = input()
+command = input()
+
+while command != 'Travel':
+    parts = command.split(":")
+    action = parts[0]
+    if action == 'Add Stop':
+        index = int(parts[1])
+        substring = parts[2]
+        stops = add_stop(stops, index, substring)
+    elif action == 'Remove Stop':
+        start_index = int(parts[1])
+        end_index = int(parts[2])
+        stops = remove_stop(stops, start_index, end_index)
+    elif action == 'Switch':
+        old_string = parts[1]
+        new_string = parts[2]
+        stops = switch(stops, old_string, new_string)
+    print(stops)
+    command = input()
+print(f'Ready for world tour! Planned stops: {stops}')
 
