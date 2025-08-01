@@ -1,0 +1,38 @@
+pirate_ship = [int(element) for element in input().split(">")]
+war_ship = [int(element) for element in input().split(">")]
+max_health = int(input())
+repair_health_threshold = max_health * 0.20
+
+while (command := input()) != 'Retire':
+    if command.startswith("Fire"):
+        index, damage = [int(element) for element in command.split()[1:]]
+        if not 0 <= index < len(war_ship):
+            continue
+        war_ship[index] -= damage
+        if war_ship[index] <= 0:
+            print("You won! The enemy ship has sunken.")
+            break
+
+    elif command.startswith("Defend"):
+        start_index, end_index, damage = [int(element) for element in command.split()[1:]]
+        if not (0 <= start_index < len(pirate_ship) and 0 <= end_index < len(pirate_ship)):
+            continue
+        for i in range(start_index, end_index + 1):
+            pirate_ship[i] -= damage
+            if pirate_ship[i] <= 0:
+                print("You lost! The pirate ship has sunken.")
+                exit()
+
+    elif command.startswith("Repair"):
+        index, health = [int(element) for element in command.split()[1:]]
+        if not 0 <= index < len(pirate_ship):
+            continue
+        pirate_ship[index] += min(health, max_health - pirate_ship[index])
+
+    elif command.startswith("Status"):
+        for_repair = sum(1 for section in pirate_ship if section < repair_health_threshold)
+        print(f"{for_repair} sections need repair.")
+
+else:
+    print(f"Pirate ship status: {sum(pirate_ship)}")
+    print(f"Warship status: {sum(war_ship)}")
